@@ -1,4 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Check</title>
+    </head>
+<body>
+    <form action="" method="post">
+        <input type="url" id="urlId" name="urlId">
+        <button type="submit">Submit</button>
+    </form>
+
+    <script type="text/javascript">
+        window.addEventListener("click", function(event) {
+        var tg = event.target;
+        var value= getXPath(tg);
+        console.log(value);
+        });
+
+        function getXPath( element )
+        {
+        var val=element.value;
+        //alert("val="+val);
+        var xpath = '';
+        for ( ; element && element.nodeType == 1; element = element.parentNode )
+        {
+        //alert(element);
+        var id = jQuery(element.parentNode).children(element.tagName).index(element) + 1;
+        id > 1 ? (id = '[' + id + ']') : (id = '');
+        xpath = '/' + element.tagName.toLowerCase() + id + xpath;
+        }
+        alert(xpath);
+        return xpath;
+        }
+    </script>
+</body>
+</html>
+
+
 <?php
+    error_reporting(0);
+    ini_set('display_errors', 0);
  function get_web_page( $url )
     {
         $user_agent='Mozilla/5.0 (Windows NT 6.1; rv:8.0) Gecko/20100101 Firefox/8.0';
@@ -33,12 +73,17 @@
         $header['content'] = $content;
         return $header;
     }
-$url = "http://sadab.me/";
-$url1=preg_split('/', $url);
-echo $url1;
+if (isset($_POST['urlId'])) {
+    $url = $_POST['urlId'];
+}
+$url1 = explode('/', $url);
+$url2 = $url1[0]."//".$url1[2];
 $result = get_web_page( $url );
 $page = $result['content'];
-$page= preg_replace("#(href\s*=\s*[\"'])([^\"'>]+)([\"'>]+)#", 'href="'.$url.'$2$3', $page);
-$page= preg_replace("#(src\s*=\s*[\"'])([^\"'>]+)([\"'>]+)#", 'src="'.$url.'$2$3', $page);
+//echo $url2;
+$page= preg_replace("#(href\s*=\s*[\"'])(^((?!http).)*$)([^\"'>]+)([\"'>]+)#", 'href="'.$url2.'$2$3', $page);
+$page= preg_replace("#(href\s*=\s*[\"'])(/)#", 'href="'.$url2.'$2$3', $page);
+$page= preg_replace("#(src\s*=\s*[\"'])(^((?!http).)*$)([^\"'>]+)([\"'>]+)#", 'src="'.$url2.'$2$3', $page);
+$page= preg_replace("#(src\s*=\s*[\"'])(/)#", 'src="'.$url2.'$2$3', $page);
 echo $page;
 ?>
