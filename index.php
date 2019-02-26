@@ -2,13 +2,18 @@
 <html>
 <head>
     <title>Check</title>
-    </head>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
 <body>
+    <div style="position: fixed;z-index: 9999999999;width: 100%;top:0">
+    <textarea rows="4" cols="50" id="domPath">
+        Here will show the DOM path 
+    </textarea>
     <form action="" method="post">
         <input type="url" id="urlId" name="urlId">
         <button type="submit">Submit</button>
     </form>
-
+    </div>
     <script type="text/javascript">
         window.addEventListener("click", function(event) {
         var tg = event.target;
@@ -28,7 +33,7 @@
         id > 1 ? (id = '[' + id + ']') : (id = '');
         xpath = '/' + element.tagName.toLowerCase() + id + xpath;
         }
-        alert(xpath);
+        document.getElementById("domPath").innerHTML = xpath;
         return xpath;
         }
     </script>
